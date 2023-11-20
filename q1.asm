@@ -10,7 +10,7 @@ DATA segment
     endl   db 0dH, 0aH,'$'
 DATA ends
 CODE segment
-    OutPutShort:
+OutPutShort PROC
                 MOV    AX, DX             ;DX中存储的结果移动到AX
                 XOR    BX, BX
                 MOV    BX, 10
@@ -30,8 +30,9 @@ CODE segment
                 INT    21H
                 LOOP   outputS
                 RET
+OutPutShort ENDP
     ; 输出DX:AX, 如果只要输出16位则自行清空DX
-    Disp:       
+Disp PROC
                 XOR    BX, BX
                 XOR    CX, CX
     ;要输出的数放到SI:DI
@@ -87,6 +88,7 @@ CODE segment
                 INT    21H
                 LOOP   output
                 RET
+Disp ENDP
     hahaha:     
                 LEA    DX, haha
                 MOV    AX, 0900H
@@ -103,7 +105,7 @@ CODE segment
                 MOV    BP, 10             ;BP为常量10
     ;结果存储于SI, BX中, BP用于存储乘数, CX存储读入的结果, DX:AX存储上一次结果低16位乘10后的结果, AX部分可以直接放回BX, DX部分需要存入DI
     ;然后进行高16位乘10, 此处不再考虑溢出, 因为如果还有溢出的话说明值超过了32位整数, 不予以考虑, 将AX部分与DI相加即可得到实际结果的高16位
-    Input:      
+Input PROC
     ;读入单个字符
                 MOV    AX, 0100H
                 INT    21H
@@ -135,6 +137,7 @@ CODE segment
                 MOV    AX, BX             ; 前面懒得改了, 总之最终的结果为DX:AX
                 MOV    DX, SI
                 RET
+Input ENDP
     start:      
                 ASSUME CS:CODE,DS:DATA
                 MOV    AX,DATA            ;将data首地址赋值给AX
